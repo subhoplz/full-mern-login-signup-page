@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Login</title>
+    <link rel="stylesheet" href="css/login.css">
+    
+</head>
+<main id=app>
+  <div class="text">
+    <body>
+    <div class="login-box">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+            <div class="user-box">
+                <input type="text" name="name" required>
+                <label>Username</label>
+            </div>
+            <div class="user-box">
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+            <input class="sub" type="submit" value="Login">
+            <br>
+            <h4>Don't have an account?</h4>
+            <a href="/signup">Create a new account</a>
+
+            
+        </form>
+        <canvas id="snowCanvas"></canvas>
+
+    <script>
+         function validateSignup() {
+            // Assume the signup process is successful and the data is saved to the database.
+            // You may replace this with actual server-side validation and database interaction.
+
+            alert("Data has been saved to the database. You can now log in.");
+            
+            // Redirect to the login page after showing the alert.
+            window.location.href = "/loginn";
+            
+            // Prevent form submission (since we're redirecting manually).
+            return false;
+        }
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const flakes = [];
+
+        for (let i = 0; i < 100; i++) {
+            flakes.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 2,
+                speed: Math.random() * 1 + 0.5,
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < flakes.length; i++) {
+                const flake = flakes[i];
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+
+                flake.y += flake.speed;
+
+                if (flake.y > canvas.height) {
+                    flake.y = -flake.size;
+                }
+            }
+        }
+
+        function updateCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function animate() {
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', updateCanvasSize);
+        animate();
+    </script>
+    </div>
+    
+
+</body>
+  </div>
+</main>
+<script>
+    let colorType = {
+  type: "multi"
+};
+
+let colors = {
+  color1: "rgba(255,255,255,1)",
+  color2: "rgba(233,239,250,1)",
+  color3: "rgba(222,241,250,1)",
+  color4: "rgba(178,209,219,1)",
+  color5: "rgba(135,143,145,1)"
+};
+
+let options = {
+  alphaSpeed: 2,
+  alphaVariance: 1,
+  color: [colors.color1, colors.color2, colors.color3, colors.color4],
+  composition: "source-over",
+  count: 120,
+  direction: 160,
+  drift: 2,
+  glow: 50,
+  imageUrl: [
+    "https://imgs.search.brave.com/1Ofuxm7Uq52JPqtMMD9yogQnYZF8vN6lzWVJv0KQZYA/rs:fit:500:0:0/g:ce/aHR0cHM6Ly8xMjNw/bmdkb3dubG9hZC5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MTkvMTEvU25vd2Zs/YWtlLnBuZw",
+    "https://imgs.search.brave.com/rYzBjLmTtuyTCcZ4oOCiunqXzFfskwZq-B3el_VKqR4/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy81/ODBiNTg1YjJlZGJj/ZTI0YzQ3YjI2ZmYu/cG5n",
+    "https://assets.codepen.io/13471/snowflake(2).png",
+    "https://assets.codepen.io/13471/snowflake(3).png",
+    "https://assets.codepen.io/13471/snowflake(4).png",
+    "https://assets.codepen.io/13471/snowflake(5).png",
+    "https://assets.codepen.io/13471/snowflake(6).png",
+    "https://assets.codepen.io/13471/snowflake(7).png",
+    "https://assets.codepen.io/13471/snowflake(8).png",
+  ],
+  maxAlpha: 2,
+  maxSize: 24,
+  minAlpha: -0.2,
+  minSize: 3,
+  parallax: 6,
+  rotation: 0.5,
+  shape: ["image"],
+  speed: 2.5,
+  style: "fill",
+  twinkle: false,
+  xVariance: 20,
+  yVariance: 20,
+};
+
+window.onload = function() {
+  initStats();
+  initSparticles();
+  initGui();
+}
+
+window.initSparticles = function() {
+  var $main = document.querySelector("main");
+  window.mySparticles = new Sparticles($main,options);
+};
+
+window.initStats = function() {
+  var stats = new Stats();
+  stats.domElement.classList.add("stats");
+  document.body.appendChild(stats.domElement);
+  function statsDisplay() {
+    stats.begin();
+    stats.end();
+    requestAnimationFrame(statsDisplay);
+  }
+  requestAnimationFrame(statsDisplay);
+};
+
+window.initGui = function() {
+  const s = window.mySparticles;
+  const shapes = ["circle", "square", "triangle", "diamond", "line", "image"];
+  const styles = ["fill", "stroke", "both"];
+  const colorOptions = ["single", "multi", "rainbow"];
+  const composites = [
+    "source-over",
+    "source-in",
+    "source-out",
+    "source-atop",
+    "destination-over",
+    "destination-in",
+    "destination-out",
+    "destination-atop",
+    "lighter",
+    "copy",
+    "xor",
+    "multiply",
+    "screen",
+    "overlay",
+    "darken",
+    "color-dodge",
+    "color-burn",
+    "hard-light",
+    "soft-light",
+    "difference",
+    "exclusion",
+    "hue",
+    "saturation",
+    "color",
+    "luminosity"
+  ];
+  const rerender = () => {
+    window.mySparticles.destroy();
+    window.initSparticles();
+  };
+  var rerenderColors = function(v) {
+    if (colorType.type === "rainbow") {
+      options.color = "rainbow";
+    } else if (colorType.type === "single") {
+      options.color = colors.color1;
+    } else {
+      options.color = Object.keys(colors).map(i => {
+        return colors[i];
+      });
+    }
+    rerender();
+  };
+
+  const gui = new dat.GUI({ load: options });
+  const part = gui.addFolder("Particles");
+  part.open();
+  part.add( options, "count", 1, 1500, 1).onFinishChange(rerender);
+  part.add( options, "shape", shapes).onFinishChange(rerender);
+  part.add( options, "style", styles).onFinishChange(rerender);
+  const image = part.addFolder("Image");
+  // image.add( options, "imageUrl").onFinishChange(rerender);
+  part.add( options, "minSize", 1, 50, 1).onFinishChange(rerender);
+  part.add( options, "maxSize", 1, 50, 1).onFinishChange(rerender);
+  const anim = gui.addFolder("Animation");
+  anim.add( options, "direction", 0, 360, 1).onFinishChange(rerender);
+  anim.add( options, "speed", 0, 100, 0.1).onFinishChange(rerender);
+  anim.add( options, "rotation", 0, 100, 0.1).onFinishChange(rerender);
+  const move = anim.addFolder("Movement");
+  move.add( options, "parallax", 0, 10, 0.1).onFinishChange(rerender);
+  move.add( options, "drift", 0, 10, 0.1).onFinishChange(rerender);
+  move.add( options, "xVariance", 0, 50, 0.1).onFinishChange(rerender);
+  move.add( options, "yVariance", 0, 50, 0.1).onFinishChange(rerender);
+  const vis = gui.addFolder("Visual");
+  vis.add( options, "glow", 0,50).onFinishChange(rerender);
+  vis.add( options, "composition", composites).onFinishChange(rerender);
+  const alpha = vis.addFolder("Alpha");
+  alpha.add( options, "twinkle").onFinishChange(rerender);
+  alpha.add( options, "minAlpha", -2, 2, 0.1).onFinishChange(rerender);
+  alpha.add( options, "maxAlpha", -2, 2, 0.1).onFinishChange(rerender);
+  alpha.add( options, "alphaSpeed", 0, 50, 1).onFinishChange(rerender);
+  alpha.add( options, "alphaVariance", 0, 20, 1).onFinishChange(rerender);
+  const color = vis.addFolder("Color");
+  color.open();
+  color.add(colorType, "type", colorOptions).onFinishChange(rerenderColors);
+  color.addColor(colors, "color1").onFinishChange(rerenderColors);
+  color.addColor(colors, "color2").onFinishChange(rerenderColors);
+  color.addColor(colors, "color3").onFinishChange(rerenderColors);
+  color.addColor(colors, "color4").onFinishChange(rerenderColors);
+  color.addColor(colors, "color5").onFinishChange(rerenderColors);
+};
+
+</script>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="css/signup.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <form action="/signup" method="post">
+            <input placeholder="Name" name="name" type="text" required>
+            <br>
+            <input placeholder="Password" name="password" type="password" required>
+            <br>
+            <input class="sub" type="submit" value="Sign Up">
+        </form>
+        <p><a href="/loginn">Go back to login page</a></p>
+    </div>
+
+    <canvas id="rainCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const drops = [];
+
+        for (let i = 0; i < 500; i++) {
+            drops.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                length: Math.random() * 20 + 10,
+                opacity: Math.random(),
+                speed: Math.random() * 5 + 2,
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < drops.length; i++) {
+                const drop = drops[i];
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x, drop.y + drop.length);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${drop.opacity})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            move();
+        }
+
+        function move() {
+            for (let i = 0; i < drops.length; i++) {
+                const drop = drops[i];
+                drop.y += drop.speed;
+
+                if (drop.y > canvas.height) {
+                    drop.y = -20;
+                }
+            }
+        }
+
+        function updateCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function animate() {
+            draw();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', updateCanvasSize);
+        animate();
+    </script>
+</body>
+</html>
